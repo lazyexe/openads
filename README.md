@@ -6,13 +6,16 @@ Lightweight & extensible OpenAds for Laravel, suitable for internal ads, marketp
 
 ## ✨ Key Features
 
-* 🔍 Search Ads (keyword-based)
-* 🖼️ Image & 🎥 Video Ads (URL / local / CDN)
-* 🏆 Auction & ranking (bid × quality score)
-* 🎯 Campaign → Ad Group → Ads → Keywords → Assets
-* 📊 Automatic impression & click tracking
-* 💰 Click cost = bid, view cost = bid × 20% (configurable)
-* 🔄 CTR, relevance, landing score & campaign balance auto-calculated
+- 🔍 Search Ads (keyword-based)
+- 🖼️ Image & 🎥 Video Ads (URL / local / CDN)
+- 🎯 Campaign → Ad Group → Ads → Keywords → Assets
+- ⏰ Display based on time (start_time & end_time, default 24 hours)
+- 🌍 Target locations: country / city (multi, default all)
+- 📱 Target devices: android / ios / desktop (multi, default all)
+- 🏆 Auction & ranking (bid × quality score)
+- 📊 Automatic impression & click tracking
+- 💰 Click cost = bid, view cost = bid × 20% (configurable)
+- 🔄 CTR, relevance, landing score & campaign balance calculated automatically
 
 ---
 
@@ -180,13 +183,17 @@ return [
 
 #### Campaign
 
-| Field          | Description     |
-| -------------- | --------------- |
-| `name`         | Campaign name   |
-| `daily_budget` | Daily budget    |
-| `status`       | active / paused |
-| `start_date`   | Campaign start  |
-| `end_date`     | Campaign end    |
+| Field              | Description                                                    |
+| ------------------ | -------------------------------------------------------------- |
+| `name`             | Campaign name                                                  |
+| `daily_budget`     | Daily budget                                                   |
+| `status`           | active / paused                                                |
+| `start_date`       | Campaign start date                                            |
+| `end_date`         | Campaign end date                                              |
+| `start_time`       | Start time (nullable = runs 24 hours)                          |
+| `end_time`         | End time (nullable = runs 24 hours)                            |
+| `target_locations` | JSON: target countries/cities, null = all locations            |
+| `target_devices`   | JSON: target devices (android/ios/desktop), null = all devices |
 
 #### Ad Group
 

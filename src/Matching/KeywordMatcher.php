@@ -30,6 +30,35 @@ class KeywordMatcher implements MatcherInterface
                 $q->whereNull('ads_campaigns.end_date')
                   ->orWhere('ads_campaigns.end_date', '>=', now());
             })
+            ->where(function($q) use ($context) {
+                $currentTime = now()->format('H:i:s');
+
+                $q->where(function($sub) use ($currentTime) {
+                    $sub->whereNull('ads_campaigns.start_time')
+                        ->orWhere('ads_campaigns.start_time', '<=', $currentTime);
+                })->where(function($sub) use ($currentTime) {
+                    $sub->whereNull('ads_campaigns.end_time')
+                        ->orWhere('ads_campaigns.end_time', '>=', $currentTime);
+                });
+
+                if (!empty($context->meta['country']) || !empty($context->meta['city'])) {
+                    $country = $context->meta['country'] ?? '';
+                    $city = $context->meta['city'] ?? '';
+                    $q->where(function($sub) use ($country, $city) {
+                        $sub->whereNull('ads_campaigns.target_locations')
+                            ->orWhereJsonContains('ads_campaigns.target_locations', $country)
+                            ->orWhereJsonContains('ads_campaigns.target_locations', $city);
+                    });
+                }
+
+                if (!empty($context->meta['device'])) {
+                    $device = $context->meta['device'];
+                    $q->where(function($sub) use ($device) {
+                        $sub->whereNull('ads_campaigns.target_devices')
+                            ->orWhereJsonContains('ads_campaigns.target_devices', $device);
+                    });
+                }
+            })
             ->where(function($q) use ($query) {
                 $q->where('ads_keywords.negative', false)
                   ->where('ads_keywords.keyword', 'like', "%{$query}%");

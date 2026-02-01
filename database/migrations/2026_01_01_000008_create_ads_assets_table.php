@@ -7,16 +7,24 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::table('ads_ads', function (Blueprint $table) {
-            $table->decimal('cpc', 12, 2)->default(0)->after('bid');
-            $table->decimal('cpm', 12, 2)->default(0)->after('cpc');
+        Schema::create('ads_assets', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('ad_id')
+                ->constrained('ads_ads')
+                ->cascadeOnDelete();
+
+            $table->enum('type', ['image', 'video', 'banner'])->default('image');
+            $table->string('source');
+            $table->boolean('is_primary')->default(false);
+
+            $table->timestamps();
+
+            $table->index(['ad_id', 'is_primary']);
         });
     }
 
     public function down(): void
     {
-        Schema::table('ads_ads', function (Blueprint $table) {
-            $table->dropColumn(['cpc', 'cpm']);
-        });
+        Schema::dropIfExists('ads_assets');
     }
 };

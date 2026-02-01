@@ -8,8 +8,11 @@ Lightweight & extensible OpenAds untuk Laravel, cocok untuk internal ads, market
 
 - 🔍 Search Ads (keyword-based)
 - 🖼️ Image & 🎥 Video Ads (URL / local / CDN)
-- 🏆 Auction & ranking (bid × quality score)
 - 🎯 Campaign → Ad Group → Ads → Keywords → Assets
+- ⏰ Tayang berdasarkan waktu (start_time & end_time, default 24 jam)
+- 🌍 Target lokasi: negara / kota (multi, default semua)
+- 📱 Target device: android / ios / desktop (multi, default semua)
+- 🏆 Auction & ranking (bid × quality score)
 - 📊 Tracking impression & click otomatis
 - 💰 Biaya klik = bid, biaya view = bid × 20% (configurable)
 - 🔄 CTR, relevance, landing score & balance campaign otomatis
@@ -175,13 +178,17 @@ return [
 
 #### Campaign
 
-| Field          | Keterangan      |
-| -------------- | --------------- |
-| `name`         | Nama campaign   |
-| `daily_budget` | Budget harian   |
-| `status`       | active / paused |
-| `start_date`   | Mulai campaign  |
-| `end_date`     | Akhir campaign  |
+| Field              | Keterangan                                                     |
+| ------------------ | -------------------------------------------------------------- |
+| `name`             | Nama campaign                                                  |
+| `daily_budget`     | Budget harian                                                  |
+| `status`           | active / paused                                                |
+| `start_date`       | Mulai campaign                                                 |
+| `end_date`         | Akhir campaign                                                 |
+| `start_time`       | Jam tayang mulai (nullable = tayang 24 jam)                    |
+| `end_time`         | Jam tayang selesai (nullable = tayang 24 jam)                  |
+| `target_locations` | JSON: negara/kota target, null = semua lokasi                  |
+| `target_devices`   | JSON: device target (android/ios/desktop), null = semua device |
 
 #### Ad Group
 
@@ -198,6 +205,7 @@ return [
 | --------------- | ------------------ |
 | `ad_group_id`   | Relasi ke ad group |
 | `title`         | Judul iklan        |
+| `description`   | Deskripsi iklan    |
 | `url`           | Landing page       |
 | `bid`           | Harga bidding      |
 | `ctr`           | Click-through rate |

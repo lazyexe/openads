@@ -9,14 +9,34 @@ class AdEngine
 {
     public function search(string $query): AdCollection
     {
+        $ip = request()->ip();
+        $userAgent = request()->userAgent();
+
+        if (preg_match('/android/i', $userAgent)) {
+            $device = 'android';
+        } elseif (preg_match('/iphone|ipad|ipod/i', $userAgent)) {
+            $device = 'ios';
+        } else {
+            $device = 'desktop';
+        }
+
+        $country = $this->detectCountry($ip);
+        $city = $this->detectCity($ip);
+
+        $meta = [
+            'device' => $device,
+            'country' => $country,
+            'city' => $city,
+        ];
+
         $collection = (new SearchAdsPlatform())
-            ->run(new AdContext($query));
+            ->run(new AdContext($query, $meta));
 
         foreach ($collection->all() as $ad) {
             DB::table('ads_impressions')->insert([
                 'ad_id' => $ad->id,
-                'ip' => request()->ip(),
-                'user_agent' => request()->userAgent(),
+                'ip' => $ip,
+                'user_agent' => $userAgent,
                 'context' => json_encode([
                     'query' => $query,
                     'page' => request()->path(),
@@ -74,5 +94,15 @@ class AdEngine
         }
 
         return $row->url;
+    }
+
+    protected function detectCountry(string $ip): ?string
+    {
+        return 'ID';
+    }
+	
+    protected function detectCity(string $ip): ?string
+    {
+        return 'Jakarta';
     }
 }
