@@ -1,0 +1,25 @@
+{
+  "name": "lazyexe/openads",
+  "description": "Lightweight Ads Engine for Laravel",
+  "type": "library",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "OpenAds\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "OpenAds\\AdEngineServiceProvider"
+      ],
+      "aliases": {
+        "Ads": "OpenAds\\Facades\\Ads"
+      }
+    }
+  },
+  "require": {
+    "php": "^8.2",
+    "illuminate/support": "^12.0"
+  }
+}
