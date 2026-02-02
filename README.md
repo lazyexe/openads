@@ -93,15 +93,23 @@ class HomeController extends Controller
 ### AdsClickController
 
 ```php
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
 use OpenAds\Facades\Ads;
 
-public function click(int $adId)
+class AdsClickController extends Controller
 {
-    $url = Ads::logClick($adId);
-
-    if (!$url) abort(404, 'Ad not found or insufficient campaign balance.');
-
-    return redirect()->away($url);
+    public function click(Request $request, int $adId)
+    {
+        $url = Ads::logClick($adId);
+        if (!$url) {
+            abort(404, 'Ads not found or insufficient budget.');
+        }
+        return redirect()->away($url);
+    }
 }
 ```
 
